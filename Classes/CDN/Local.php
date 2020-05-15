@@ -5,7 +5,7 @@ use Dagou\Moment\Traits\Asset;
 
 class Local extends AbstractCDN {
     use Asset;
-    const URL = 'EXT:Moment/Resources/Public/';
+    const URL = 'EXT:moment/Resources/Public/';
 
     /**
      * @param string|NULL $js
