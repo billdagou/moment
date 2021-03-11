@@ -16,8 +16,6 @@ You can also load your own libraries.
 
 For more options please refer to &lt;f:asset.script&gt;.
 
-For more options please refer to &lt;f:asset.script&gt;.
-
 To use other Moment source, you can register it in `ext_localconf.php` or `AdditionalConfiguration.php`.
 
     \Dagou\Moment\Utility\ExtensionUtility::registerSource(\Dagou\Moment\Source\jsDelivr::class);
