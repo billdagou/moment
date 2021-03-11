@@ -1,6 +1,6 @@
 <?php
-namespace Dagou\Moment\CDN;
+namespace Dagou\Moment\Source;
 
-class cdnjs extends AbstractCDN {
+class CloudFlare extends AbstractSource {
     const URL = '//cdnjs.cloudflare.com/ajax/libs/moment.js/'.self::VERSION.'/';
 }

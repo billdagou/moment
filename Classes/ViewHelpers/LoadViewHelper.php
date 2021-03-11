@@ -1,38 +1,43 @@
 <?php
 namespace Dagou\Moment\ViewHelpers;
 
-use Dagou\Moment\CDN\Customization;
-use Dagou\Moment\CDN\Local;
-use Dagou\Moment\Interfaces\CDN;
+use Dagou\Moment\Interfaces\Source;
+use Dagou\Moment\Source\Local;
+use Dagou\Moment\Utility\ExtensionUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Fluid\ViewHelpers\Asset\ScriptViewHelper;
 
-class LoadViewHelper extends AbstractViewHelper {
-    public function initializeArguments() {
-        $this->registerArgument('footer', 'boolean', 'Add to footer or not.', FALSE, TRUE);
-        $this->registerArgument('js', 'string', 'Moment.js file path.');
-    }
+class LoadViewHelper extends ScriptViewHelper {
+    public function initializeArguments(): void {
+        parent::initializeArguments();
 
-    public function render() {
-        $cdn = $this->getCDN((bool)$this->arguments['js']);
-
-        $cdn->load($this->arguments['js'], $this->arguments['footer']);
+        $this->registerArgument('disableSource', 'boolean', 'Disable Source.', FALSE, FALSE);
+        $this->overrideArgument(
+            'identifier',
+            'string',
+            'Use this identifier within templates to only inject your JS once, even though it is added multiple times.',
+            FALSE,
+            'moment'
+        );
     }
 
     /**
-     * @param bool $isCustomized
-     *
-     * @return \Dagou\Moment\Interfaces\CDN
+     * @return string
      */
-    protected function getCDN(bool $isCustomized): CDN {
-        if ($isCustomized) {
-            return GeneralUtility::makeInstance(Customization::class);
+    public function render(): string {
+        if (!$this->arguments['src']) {
+            if (!$this->arguments['disableSource']
+                && ($className = ExtensionUtility::getSource())
+                && is_subclass_of($className, Source::class)
+            ) {
+                $source = GeneralUtility::makeInstance($className);
+            } else {
+                $source = GeneralUtility::makeInstance(Local::class);
+            }
+
+            $this->tag->addAttribute('src', $source->getJs());
         }
 
-        if (($className = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['moment']['CDN']) && is_subclass_of($className, CDN::class)) {
-            return GeneralUtility::makeInstance($className);
-        } else {
-            return GeneralUtility::makeInstance(Local::class);
-        }
+        return parent::render();
     }
 }
