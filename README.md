@@ -8,18 +8,18 @@ The extension version only matches the Moment.js library version, it doesn't mea
 
 You can load the library in your Fluid template.
 
-    <moment:load />
+    <moment:js />
 
 You can also load your own libraries.
 
-    <moment:load src="..." />
+    <moment:js src="..." />
 
 For more options please refer to &lt;f:asset.script&gt;.
 
 To use other Moment source, you can register it in `ext_localconf.php` or `AdditionalConfiguration.php`.
 
-    \Dagou\Moment\Utility\ExtensionUtility::registerSource(\Dagou\Moment\Source\jsDelivr::class);
+    \Dagou\Moment\Utility\ExtensionUtility::registerSource(\Dagou\Moment\Source\JsDelivr::class);
 
 You may want to disable the other source and use the local one instead in some cases, for example saving page as PDF by [WKHtmlToPdf](https://wkhtmltopdf.org/).
 
-    <moment:load disableSource="true" />
+    <moment:js disableSource="true" />
